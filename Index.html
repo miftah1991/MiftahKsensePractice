@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USER List</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <style type="text/css">
+       
+    </style>
+<script type="text/javascript">
+     $(document).ready(function () {
+       getAllUsers();
+       
+    });
+    function getAllUsers()
+    {
+        //$("#userTable").empty();
+            //$("#header").text("درخواستی های در حالت جریان");
+            var tr;
+            $.ajax({
+                url: 'https://jsonplaceholder.typicode.com/users',
+                method: 'get',
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                            
+                            tr += '<tr>';
+                            tr +='<td><a href="#" onClick="showPosts('+data[i].id+')">'+data[i].name+'</a></td>'
+                            tr +='<td>'+data[i].username+'</td>'
+                            tr +='<td>'+data[i].email+'</td>'
+                            tr +='<td>'+data[i].address.street+'</td>'
+                            tr +='<td>'+data[i].address.suite+'</td>'
+                            tr +='<td>'+data[i].address.city+'</td>'
+                            tr +='<td>'+data[i].address.zipcode+'</td>'
+                            tr +='<td>'+data[i].address.geo.lat+'</td>'
+                            tr +='<td>'+data[i].address.geo.lng+'</td>'
+                            tr +='<td>'+data[i].phone+'</td>'
+                            tr +='<td>'+data[i].website+'</td>'
+                            tr +='<td>'+data[i].company.name+'</td>'
+                            tr +='<td>'+data[i].company.catchPhrase+'</td>'
+                            tr +='<td>'+data[i].company.bs+'</td>'
+                        }
+                    $("#userTable").append(tr);
+                }
+                 , error: function (data) {
+                     console.log(data);
+
+                 }
+            });
+    }
+    function showPosts(varID)
+    {
+        GetUserPosts(varID);
+        var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+            keyboard: false
+        });
+        myModal.show();
+    }
+    function GetUserPosts(varID)
+    {
+        //$("#userPosts").find("tr:gt(0)").remove();
+        $('.dataRow').remove()
+        var tr;
+            $.ajax({
+                url: 'https://jsonplaceholder.typicode.com/posts?userId='+varID,
+                method: 'get',
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                            rownum = i+1;
+                            tr += '<tr class="dataRow">';
+                            tr +='<td>'+ rownum +'</td>'
+                            tr +='<td>'+data[i].title+'</td>'
+                            tr +='<td>'+data[i].body+'</td>'
+                        }
+                    $("#userPosts").append(tr);
+                }
+                 , error: function (data) {
+                     console.log(data);
+
+                 }
+            });
+    }
+    </script>
+</head>
+<body>
+    <div class="container p-3">
+        <div class="card">
+            <div class="card-header">
+                List of Users
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-responsive" id="userTable">
+                        <tr>
+                            <th rowspan="2">Name</th>
+                            <th rowspan="2">Username</th>
+                            <th rowspan="2">Email</th>
+                            <th colspan="6" class="text-center">Address</th>
+                            <th rowspan="2">Phone</th>
+                            <th rowspan="2">Website</th>
+                            <th colspan="3" class="text-center">Company</th>
+                        </tr>
+                        <tr>
+                            <td>Street</td>
+                            <td>Suite</td>
+                            <td>City</td>
+                            <td>Zipcode</td>
+                            <td>Geo-Lat</td>
+                            <td>Geo-lng</td>
+                            <td>Name</td>
+                            <td>catchPhrase</td>
+                            <td>bs</td>
+                        </tr>
+                        
+                    </table>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    
+    
+    
+</body>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">User Posts</h4>
+                <button type="button" class="close" style="color:white;"><i class="fa fa-close">x</i></button>
+            </div>
+            <div class="modal-body">
+                <div class="row table-responsive">
+                    <table class="table" id="userPosts">
+                        <tr>
+                            <td>No</td>
+                            <td>Title</td>
+                            <td>Body</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>
